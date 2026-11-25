@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a5a9c">
+<title>腦中風衛教</title>
+<style>
+  :root{
+    --primary:#0a5a9c; --primary2:#0d6fbf; --accent:#c81e2d;
+    --bg:#eef3f8; --card:#ffffff; --text:#2b3440; --muted:#66727f;
+    --ok:#1e9e5a; --bad:#d64545; --warn:#8a5a00; --warnbg:#fff3cd; --line:#e3eaf2;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; }
+  body{
+    font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;
+    background:var(--bg); color:var(--text);
+    display:flex; flex-direction:column; height:100dvh; overflow:hidden;
+  }
+  header{
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#fff; padding:14px 18px 12px; box-shadow:0 2px 8px rgba(0,0,0,.15); z-index:5;
+  }
+  header h1{ font-size:20px; display:flex; align-items:center; gap:8px; }
+  header .sub{ font-size:12px; opacity:.85; margin-top:2px; }
+  main{ flex:1; overflow-y:auto; padding:14px 14px 24px; }
+  .page{ display:none; animation:fade .25s ease; }
+  .page.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+  h2.sec{ font-size:17px; color:var(--primary); margin:18px 2px 10px; display:flex; align-items:center; gap:6px; }
+  h2.sec::before{ content:""; width:5px; height:18px; border-radius:3px; background:var(--accent); display:inline-block; }
+  .card{
+    background:var(--card); border-radius:14px; padding:14px 16px; margin-bottom:12px;
+    box-shadow:0 1px 4px rgba(20,40,70,.08); border:1px solid var(--line);
+  }
+  .card h3{ font-size:16px; margin-bottom:8px; color:var(--primary); }
+  .card p, .card li{ font-size:14.5px; line-height:1.65; color:var(--text); }
+  ul.dot{ list-style:none; }
+  ul.dot li{ padding-left:18px; position:relative; margin-bottom:4px; }
+  ul.dot li::before{ content:"•"; color:var(--accent); position:absolute; left:4px; font-weight:bold; }
+  .hero{ background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff; border:none; padding:20px 18px; }
+  .hero .big{ font-size:22px; font-weight:700; margin-bottom:6px; }
+  .hero p{ font-size:14px; opacity:.92; line-height:1.6; }
+  .stat{ display:flex; align-items:center; gap:14px; margin-top:14px; background:rgba(255,255,255,.14); border-radius:12px; padding:12px 14px; }
+  .stat .num{ font-size:34px; font-weight:800; color:#ffd7d7; line-height:1; }
+  .stat .txt{ font-size:13.5px; line-height:1.5; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .quick{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 10px; text-align:center; font-size:15px; font-weight:600; color:var(--primary);
+    box-shadow:0 1px 4px rgba(20,40,70,.08); cursor:pointer;
+  }
+  .quick .ico{ font-size:26px; display:block; margin-bottom:6px; }
+  .quick:active{ transform:scale(.97); }
+  .quick.locked{ color:var(--muted); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    background:#e8f1fa; color:var(--primary); border:1px solid #c8ddf0;
+    border-radius:999px; padding:7px 14px; font-size:13.5px; font-weight:600;
+  }
+  .chip.red{ background:#fdeaea; color:var(--accent); border-color:#f3c1c1; }
+  .tag{ display:inline-block; font-size:12px; font-weight:700; border-radius:6px; padding:2px 8px; margin-right:6px; vertical-align:2px; }
+  .tag.blue{ background:#e8f1fa; color:var(--primary); }
+  .tag.red{ background:#fdeaea; color:var(--accent); }
+  .tag.gold{ background:#fff1d6; color:var(--warn); }
+  .tag.rate{ background:#e7f6ee; color:var(--ok); }
+  .fastcard{ display:flex; gap:12px; align-items:flex-start; }
+  .fastcard .letter{
+    min-width:52px; height:52px; border-radius:12px; background:var(--primary); color:#fff;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:800; font-size:24px;
+  }
+  .fastcard .letter small{ font-size:9px; font-weight:600; opacity:.85; letter-spacing:.5px; }
+  .fastcard.t .letter{ background:var(--accent); }
+  .fastcard .body b{ color:var(--primary); font-size:15px; }
+  .fastcard.t .body b{ color:var(--accent); }
+  .emg{ background:linear-gradient(135deg,#d92b3a,#b01523); color:#fff; border:none; text-align:center; padding:18px 14px; }
+  .emg .n119{ font-size:40px; font-weight:900; letter-spacing:2px; }
+  .emg p{ font-size:14px; margin-top:4px; opacity:.95; }
+  .warn{ background:var(--warnbg); border:1px solid #f0dc9a; }
+  .warn p{ color:var(--warn); font-weight:600; font-size:14px; }
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  th,td{ border:1px solid var(--line); padding:8px 10px; text-align:left; line-height:1.55; }
+  th{ background:var(--primary); color:#fff; white-space:nowrap; }
+  tr:nth-child(odd) td{ background:#f6f9fc; }
+  td.k{ font-weight:700; color:var(--primary); white-space:nowrap; }
+  nav#tabbar{
+    display:flex; background:#fff; border-top:1px solid var(--line);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom)); z-index:5;
+  }
+  nav#tabbar button{
+    flex:1; background:none; border:none; font-family:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    font-size:11px; color:var(--muted); cursor:pointer; padding:4px 0; border-radius:10px;
+  }
+  nav#tabbar button .ico{ font-size:20px; }
+  nav#tabbar button.active{ color:var(--primary); font-weight:700; background:#eaf2fa; }
+  /* ---------- 閱讀認證 ---------- */
+  .toast{
+    position:fixed; top:74px; left:50%; transform:translateX(-50%) translateY(-16px);
+    background:rgba(30,40,55,.93); color:#fff; padding:10px 18px; border-radius:999px;
+    font-size:13.5px; z-index:99; opacity:0; transition:.3s; pointer-events:none;
+    max-width:86vw; text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .gatecard{ text-align:center; padding:16px; border:2px dashed #b9cfe4; background:#f6fafd; }
+  .gatecard .hint{ font-size:13px; color:var(--muted); margin-bottom:10px; }
+  .gatecard .btn{ width:100%; }
+  .gatedone{ border:2px solid #bfe5cf !important; background:#e9f7ef !important; }
+  .gatedone p{ color:#14603a; font-weight:700; }
+  .unitrow{ display:flex; align-items:center; gap:10px; padding:11px 4px; border-bottom:1px solid var(--line); cursor:pointer; font-size:14.5px; font-weight:600; }
+  .unitrow:last-of-type{ border-bottom:none; }
+  .unitrow .st{ margin-left:auto; font-size:17px; }
+  .unitrow.done{ color:var(--muted); font-weight:400; }
+  .readbar{ background:#dde7f1; border-radius:999px; height:10px; overflow:hidden; margin:4px 0 8px; }
+  .readbar div{ height:100%; width:0; background:linear-gradient(90deg,var(--ok),#4cc98a); border-radius:999px; transition:width .4s; }
+  /* ---------- 測驗 ---------- */
+  .progressWrap{ background:#dde7f1; border-radius:999px; height:8px; overflow:hidden; margin:4px 2px 14px; }
+  .progressBar{ height:100%; width:0; background:linear-gradient(90deg,var(--primary),var(--primary2)); border-radius:999px; transition:width .3s; }
+  .qnum{ font-size:13px; color:var(--muted); margin-bottom:6px; }
+  .qtext{ font-size:17px; font-weight:700; line-height:1.6; margin-bottom:14px; }
+  .opt{
+    display:block; width:100%; text-align:left; font-family:inherit; font-size:15px; line-height:1.5;
+    background:var(--card); border:2px solid var(--line); border-radius:12px;
+    padding:13px 14px; margin-bottom:10px; color:var(--text); cursor:pointer; transition:.15s;
+  }
+  .opt:active{ transform:scale(.98); }
+  .opt.correct{ border-color:var(--ok); background:#e9f7ef; color:#14603a; font-weight:700; }
+  .opt.wrong{ border-color:var(--bad); background:#fdecec; color:#8f1f1f; font-weight:700; }
+  .opt:disabled{ cursor:default; }
+  .feedback{ border-radius:12px; padding:12px 14px; font-size:14px; line-height:1.6; margin:4px 0 12px; display:none; }
+  .feedback.good{ display:block; background:#e9f7ef; border:1px solid #bfe5cf; color:#14603a; }
+  .feedback.badf{ display:block; background:#fdecec; border:1px solid #f3c1c1; color:#8f1f1f; }
+  .btn{
+    display:inline-block; border:none; border-radius:999px; font-family:inherit;
+    background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff;
+    font-size:16px; font-weight:700; padding:13px 34px; cursor:pointer;
+    box-shadow:0 3px 8px rgba(10,90,156,.3);
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn.gray{ background:#8b97a5; box-shadow:none; }
+  .center{ text-align:center; }
+  .scoreNum{ font-size:56px; font-weight:900; color:var(--primary); line-height:1.2; }
+  .quizStart{ text-align:center; padding:34px 10px; }
+  .quizStart .ico{ font-size:52px; }
+  .quizStart p{ color:var(--muted); font-size:14px; margin:10px 0 20px; line-height:1.7; }
+  .hidden{ display:none !important; }
+  .refbox{ font-size:11.5px; color:var(--muted); line-height:1.7; word-break:break-all; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span>🧠</span><span id="pageTitle">腦中風衛教</span></h1>
+  <div class="sub" id="headSub">認識腦中風：警訊、預防與處理</div>
+</header>
+
+<main>
+  <!-- ============ 首頁 ============ -->
+  <section id="home" class="page active">
+    <div class="card hero">
+      <div class="big">認識腦中風，守護健康</div>
+      <p>腦中風是國人常見且致死率高的疾病，認識警訊與預防方法，是守護健康的第一步。</p>
+      <div class="stat">
+        <div class="num">第4名</div>
+        <div class="txt">台灣十大死因<br><b>110～114 年連續五年</b></div>
+      </div>
+    </div>
+
+    <h2 class="sec">我的閱讀進度</h2>
+    <div class="card">
+      <div class="readbar"><div id="readBarFill"></div></div>
+      <p id="readPct" style="font-size:13px; color:var(--muted); margin-bottom:6px;">已完成 0 / 3 個單元，完成後解鎖測驗</p>
+      <div class="unitrow" onclick="go('learn')"><span>📖</span>認識腦中風<span class="st" id="st-learn">⬜</span></div>
+      <div class="unitrow" onclick="go('fast')"><span>⚡</span>FAST 口訣<span class="st" id="st-fast">⬜</span></div>
+      <div class="unitrow" onclick="go('care')"><span>🏥</span>預防與治療<span class="st" id="st-care">⬜</span></div>
+      <div id="goQuizWrap" class="hidden" style="margin-top:12px; text-align:center;">
+        <button class="btn" onclick="enterQuiz()">🎉 測驗已解鎖，前往測驗 →</button>
+      </div>
+      <p style="text-align:right; margin-top:8px;"><a href="javascript:void(0)" onclick="resetProgress()" style="font-size:12px; color:var(--muted);">↺ 重設閱讀紀錄</a></p>
+    </div>
+
+    <div class="grid2" style="margin-top:12px;">
+      <div class="quick" onclick="go('fast')"><span class="ico">⚡</span>FAST 口訣</div>
+      <div class="quick" onclick="go('fast'); scrollToEmg()"><span class="ico">🚑</span>緊急處理</div>
+      <div class="quick" onclick="go('care')"><span class="ico">🥗</span>預防方法</div>
+      <div class="quick locked" id="quickQuiz" onclick="enterQuiz()"><span class="ico" id="quickQuizIco">🔒</span><span id="quickQuizTxt">測驗未解鎖</span></div>
+    </div>
+
+    <div class="card warn" style="margin-top:12px;">
+      <p>ℹ️ 本 App 為衛教資訊，若有身體不適或緊急狀況，請立即就醫。</p>
+    </div>
+
+    <div class="card refbox" style="margin-top:10px;">
+      內容整理自「教學原理-衛教」（林子霈、郭芳玉製作｜指導老師：莊麗玉）．參考衛生福利部國民健康署等資料編製。
+    </div>
+  </section>
+
+  <!-- ============ 認識 ============ -->
+  <section id="learn" class="page">
+    <h2 class="sec">什麼是腦中風？</h2>
+    <div class="card">
+      <h3>缺血性腦中風（約佔 75%–80%）</h3>
+      <p>因<b>血栓或栓塞</b>阻塞血管，使腦部血液供應不足。</p>
+    </div>
+    <div class="card">
+      <h3>出血性腦中風</h3>
+      <p>腦部血管<b>破裂</b>，血液流入腦組織或腦部周圍，造成腦組織受損及<b>顱內壓升高</b>。</p>
+    </div>
+
+    <h2 class="sec">危險因子</h2>
+    <div class="card">
+      <div class="chips">
+        <span class="chip">高血壓</span><span class="chip">高血糖</span><span class="chip">高血脂</span>
+        <span class="chip">心房顫動</span><span class="chip">肥胖</span><span class="chip">抽菸</span>
+        <span class="chip">喝酒</span><span class="chip">缺乏運動</span><span class="chip">家族史</span>
+      </div>
+    </div>
+    <div class="card warn"><p>⚠️ 這些屬於「增加」發生機率的危險因子，不代表一定會造成腦中風！</p></div>
+
+    <h2 class="sec">常見症狀</h2>
+    <div class="card">
+      <ul class="dot">
+        <li>頭昏目眩、突然劇烈頭痛</li>
+        <li>視力異常、視力模糊</li>
+        <li>顏面偏癱</li>
+        <li>吞嚥困難、進食常嗆到</li>
+        <li>肢體麻木或無力</li>
+        <li>身體失去平衡</li>
+      </ul>
+    </div>
+
+    <h2 class="sec">診斷方式</h2>
+    <div class="card">
+      <ul class="dot">
+        <li>腦部電腦斷層掃描（可協助判別是否有腦出血）</li>
+        <li>核磁共振造影（MRI）</li>
+        <li>頸動脈及顱內血管超音波</li>
+        <li>血管攝影</li>
+        <li>抽血檢查（如血脂、血糖等）</li>
+      </ul>
+    </div>
+
+    <div class="card gatecard" id="gate-learn">
+      <p class="hint">讀完上方的認識單元後，點擊下方按鈕完成認證</p>
+      <button class="btn" id="confirm-learn" onclick="confirmRead('learn')">✅ 我已讀完「認識腦中風」</button>
+    </div>
+  </section>
+
+  <!-- ============ FAST ============ -->
+  <section id="fast" class="page">
+    <h2 class="sec">FAST 口訣——辨別腦中風前兆</h2>
+    <div class="card fastcard">
+      <div class="letter">F<small>FACE</small></div>
+      <div class="body"><b>微笑</b><br>微笑時或觀察時，發現<b>臉部歪斜、嘴角下垂</b>。</div>
+    </div>
+    <div class="card fastcard">
+      <div class="letter">A<small>ARM</small></div>
+      <div class="body"><b>舉手</b><br><b>單側手臂或手腳無力、麻木</b>，舉不起來或垂下來。</div>
+    </div>
+    <div class="card fastcard">
+      <div class="letter">S<small>SPEECH</small></div>
+      <div class="body"><b>說你好</b><br><b>口齒不清、大舌頭</b>，無法完整說話或理解困難。</div>
+    </div>
+    <div class="card fastcard t">
+      <div class="letter">T<small>TIME</small></div>
+      <div class="body"><b>立刻送醫</b><br><b>記下症狀發作的時間點</b>，立即撥打 <b>119</b> 送醫。</div>
+    </div>
+
+    <div class="card emg" id="emgBox">
+      <div class="n119">📞 119</div>
+      <p>發現任一警訊 → 記下發作時間 → 立即撥打 119</p>
+    </div>
+
+    <h2 class="sec">發生腦中風該如何處理？</h2>
+    <div class="card">
+      <ul class="dot">
+        <li><b>盡速就醫</b>（撥打 119，並記下發作時間）</li>
+        <li><b>保持呼吸道通暢、維持側臥</b></li>
+        <li><b>不要自行餵水、餵食或給藥</b></li>
+        <li>家屬保持鎮定，不要慌張</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <p>⚠️ 錯誤觀念：「休息一下就會好、不用就醫」→ 應把握黃金時間，立即送醫！</p>
+    </div>
+
+    <div class="card gatecard" id="gate-fast">
+      <p class="hint">讀完上方的 FAST 單元後，點擊下方按鈕完成認證</p>
+      <button class="btn" id="confirm-fast" onclick="confirmRead('fast')">✅ 我已讀完「FAST 口訣」</button>
+    </div>
+  </section>
+
+  <!-- ============ 照護 ============ -->
+  <section id="care" class="page">
+    <h2 class="sec">預防——飲食原則</h2>
+    <div class="card">
+      <div class="chips">
+        <span class="chip">多攝取蔬菜水果</span><span class="chip">減少鹽分攝取</span>
+        <span class="chip">少糖、少酒</span><span class="chip">多喝水</span><span class="chip">控制體重與三高</span>
+      </div>
+    </div>
+
+    <h2 class="sec">預防——控制三高</h2>
+    <div class="card">
+      <h3><span class="tag blue">高血壓</span></h3>
+      <p>定期測量並記錄血壓、減少鹽分及高鈉食品。</p>
+    </div>
+    <div class="card">
+      <h3><span class="tag gold">高血糖</span></h3>
+      <p>減少含糖飲料及精製糖、定時定量、均衡攝取。</p>
+    </div>
+    <div class="card">
+      <h3><span class="tag red">高血脂</span></h3>
+      <p>減少油炸及高飽和脂肪、選擇魚與豆類、適量堅果。</p>
+    </div>
+    <div class="card warn">
+      <p>共同預防：戒菸、避免過量飲酒，均衡飲食、控制體重，規律運動、良好睡眠，定期檢查並按時服藥。</p>
+    </div>
+
+    <h2 class="sec">治療——缺血性腦中風（約佔 75%–80%）</h2>
+    <div class="card">
+      <h3>靜脈血栓溶解劑 <span class="tag rate">打通率 約 1/2</span></h3>
+      <p><span class="tag gold">黃金時間</span>發病後 <b>3 小時內</b>（部分符合條件者可放寬至 <b>4.5 小時內</b>）靜脈注射，溶解血栓、恢復腦部血流。</p>
+    </div>
+    <div class="card">
+      <h3>直接注射溶栓劑 <span class="tag rate">打通率 約 2/3</span></h3>
+      <p>直接對著中風血管溶血栓。</p>
+    </div>
+    <div class="card">
+      <h3>機械式去栓／顱內動脈機械取栓術 <span class="tag rate">打通率 約 4/5</span></h3>
+      <p>針對<b>大血管阻塞</b>的急性患者，細小導管從股動脈進入移除血栓。</p>
+      <p><span class="tag gold">黃金時間</span>可延長至 <b>24 小時內</b>（需經影像評估）。</p>
+    </div>
+
+    <h2 class="sec">治療——出血性腦中風</h2>
+    <div class="card">
+      <h3>保守治療與藥物控制</h3>
+      <p>以藥物降低腦壓、血壓，防止腦水腫與合併症。</p>
+    </div>
+    <div class="card">
+      <h3>外科手術</h3>
+      <p>清除因出血產生的腦內血塊；若出血量大、造成嚴重腦壓迫或生命危險，可能需進行<b>開顱手術</b>清除血塊或引流。</p>
+    </div>
+
+    <div class="card gatecard" id="gate-care">
+      <p class="hint">讀完上方的預防與治療單元後，點擊下方按鈕完成認證</p>
+      <button class="btn" id="confirm-care" onclick="confirmRead('care')">✅ 我已讀完「預防與治療」</button>
+    </div>
+  </section>
+
+  <!-- ============ 測驗 ============ -->
+  <section id="quiz" class="page">
+    <!-- 開始畫面 -->
+    <div id="quizStart" class="card quizStart">
+      <div class="ico">✏️</div>
+      <h3 style="font-size:20px; color:var(--primary); margin:8px 0;">實力檢測</h3>
+      <p id="quizStartNote">已完成全部單元閱讀認證 ✔<br>共 5 題選擇題，作答後立即顯示解答與解析。</p>
+      <button class="btn" onclick="startQuiz()">開始測驗</button>
+    </div>
+
+    <!-- 作答畫面 -->
+    <div id="quizPlay" class="hidden">
+      <div class="qnum" id="qNum"></div>
+      <div class="progressWrap"><div class="progressBar" id="qBar"></div></div>
+      <div class="card">
+        <div class="qtext" id="qText"></div>
+        <div id="qOpts"></div>
+      </div>
+      <div class="feedback" id="qFeedback"></div>
+      <div class="center"><button class="btn hidden" id="qNext" onclick="nextQ()">下一題 →</button></div>
+    </div>
+
+    <!-- 結果畫面 -->
+    <div id="quizDone" class="hidden card quizStart">
+      <div class="ico">🏆</div>
+      <div class="scoreNum" id="scoreNum"></div>
+      <p id="scoreMsg"></p>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn" onclick="startQuiz()">再測一次</button>
+        <button class="btn gray" onclick="go('fast')">複習 FAST</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav id="tabbar">
+  <button data-page="home" class="active"><span class="ico">🏠</span>首頁</button>
+  <button data-page="learn"><span class="ico">📖</span>認識</button>
+  <button data-page="fast"><span class="ico">⚡</span>FAST</button>
+  <button data-page="care"><span class="ico">🏥</span>照護</button>
+  <button data-page="quiz" id="tabQuiz"><span class="ico" id="quizIco">🔒</span>測驗</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ---------- 分頁切換 ---------- */
+  const titles = { home:'腦中風衛教', learn:'認識腦中風', fast:'FAST 口訣', care:'預防與治療', quiz:'實力檢測' };
+  const units = ['learn','fast','care'];
+  const unitNames = { learn:'認識腦中風', fast:'FAST 口訣', care:'預防與治療' };
+  const STORE_KEY = 'strokeedu2_read';
+
+  let readDone = {};
+  try { readDone = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e){ readDone = {}; }
+
+  function doneCount(){ return units.filter(u => readDone[u]).length; }
+  function allRead(){ return doneCount() === units.length; }
+
+  let toastTimer = null;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  function go(name){
+    if (name === 'quiz' && !allRead()){
+      const left = units.filter(u => !readDone[u]).map(u => '「' + unitNames[u] + '」').join('、');
+      toast('🔒 測驗尚未解鎖：請先讀完 ' + left + ' 並完成閱讀認證');
+      return;
+    }
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(name).classList.add('active');
+    document.querySelectorAll('#tabbar button').forEach(b =>
+      b.classList.toggle('active', b.dataset.page === name));
+    document.getElementById('pageTitle').textContent = titles[name];
+    document.querySelector('main').scrollTop = 0;
+  }
+  document.querySelectorAll('#tabbar button').forEach(b =>
+    b.addEventListener('click', () => go(b.dataset.page)));
+  function scrollToEmg(){ setTimeout(() => document.getElementById('emgBox').scrollIntoView({behavior:'smooth', block:'center'}), 250); }
+
+  function enterQuiz(){
+    if (!allRead()){
+      toast('🔒 請先回到首頁完成三個單元的閱讀認證');
+      return;
+    }
+    go('quiz');
+  }
+
+  /* ---------- 閱讀認證 ---------- */
+  function confirmRead(u){
+    if (readDone[u]) return;
+    readDone[u] = true;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(readDone)); } catch(e){}
+    updateGates();
+    if (allRead()){
+      toast('🎉 太棒了！已完成全部單元閱讀，測驗已解鎖！');
+    } else {
+      toast('✅ 已完成「' + unitNames[u] + '」，還剩 ' + (units.length - doneCount()) + ' 個單元');
+    }
+  }
+
+  function updateGates(){
+    units.forEach(u => {
+      const gate = document.getElementById('gate-' + u);
+      const st = document.getElementById('st-' + u);
+      const row = st ? st.closest('.unitrow') : null;
+      if (readDone[u]){
+        gate.classList.add('gatedone');
+        gate.innerHTML = '<p>✅ 已完成「' + unitNames[u] + '」閱讀認證</p>';
+        if (st) st.textContent = '✅';
+        if (row) row.classList.add('done');
+      } else {
+        if (st) st.textContent = '⬜';
+        if (row) row.classList.remove('done');
+      }
+    });
+    const n = doneCount();
+    document.getElementById('readBarFill').style.width = (n / units.length * 100) + '%';
+    document.getElementById('readPct').textContent =
+      allRead() ? '🎉 已完成全部單元，測驗已解鎖！'
+                : '已完成 ' + n + ' / ' + units.length + ' 個單元，完成後解鎖測驗';
+    document.getElementById('headSub').textContent = allRead()
+      ? '閱讀認證完成 ✔ 測驗已解鎖'
+      : '閱讀進度 ' + n + ' / ' + units.length + '．讀完才能解鎖測驗';
+    document.getElementById('goQuizWrap').classList.toggle('hidden', !allRead());
+    document.getElementById('quizIco').textContent = allRead() ? '✏️' : '🔒';
+    document.getElementById('quickQuizIco').textContent = allRead() ? '✏️' : '🔒';
+    document.getElementById('quickQuizTxt').textContent = allRead() ? '開始測驗' : '測驗未解鎖';
+    document.getElementById('quickQuiz').classList.toggle('locked', !allRead());
+  }
+
+  function resetProgress(){
+    readDone = {};
+    try { localStorage.removeItem(STORE_KEY); } catch(e){}
+    updateGates();
+    toast('↺ 已重設閱讀紀錄，測驗重新上鎖');
+  }
+
+  /* ---------- 測驗 ---------- */
+  const quiz = [
+    { q:'腦中風近五年在台灣十大死因中，皆排名下列何者？',
+      opts:['① 第一名','② 第二名','③ 第三名','④ 第四名'], ans:3,
+      exp:'✔ 腦中風近五年（110～114 年）在台灣十大死因中皆排名第 4 名。' },
+    { q:'下列何者「不是」腦中風的危險因子？',
+      opts:['① 高血壓','② 心房顫動','③ 抽菸','④ 規律運動'], ans:3,
+      exp:'✔ 規律運動是預防措施，可降低風險；三高、心房顫動、抽菸等皆為危險因子。' },
+    { q:'依 FAST 口訣，字母「A」代表觀察哪一項表現？',
+      opts:['① 微笑時臉部是否歪斜、嘴角下垂','② 單側手臂或手腳無力、麻木','③ 說話是否口齒不清或理解困難','④ 記下發作時間並撥打 119'], ans:1,
+      exp:'✔ FAST：F 微笑看臉歪、A 舉手測單側無力、S 說你好測口齒、T 記時間立刻送醫。' },
+    { q:'家中長輩突然出現單側肢體無力、口齒不清，懷疑腦中風發作，下列處理何者正確？',
+      opts:['① 先餵開水潤喉，避免口渴','② 讓他躺著休息，觀察症狀是否自行改善','③ 維持側臥、保持呼吸道通暢，立即撥打 119 送醫','④ 自行餵服降血壓藥，等血壓下降再就醫'], ans:2,
+      exp:'✔ 應維持側臥、保持呼吸道通暢並立即送醫；切勿自行餵水、餵食或給藥。' },
+    { q:'有關缺血性腦中風的治療，靜脈注射血栓溶解劑（tPA / rt-PA）的黃金時間為發病後多久？',
+      opts:['① 30 分鐘內','② 3 小時內（部分符合條件者可放寬至 4.5 小時內）','③ 12 小時內','④ 48 小時內'], ans:1,
+      exp:'✔ 靜脈血栓溶解劑黃金時間為發病後 3 小時內；顱內動脈機械取栓術經影像評估可延長至 24 小時內。' },
+  ];
+  let cur = 0, score = 0;
+
+  function startQuiz(){
+    cur = 0; score = 0;
+    document.getElementById('quizStart').classList.add('hidden');
+    document.getElementById('quizDone').classList.add('hidden');
+    document.getElementById('quizPlay').classList.remove('hidden');
+    renderQ();
+  }
+  function renderQ(){
+    const item = quiz[cur];
+    document.getElementById('qNum').textContent = '第 ' + (cur+1) + ' / ' + quiz.length + ' 題';
+    document.getElementById('qBar').style.width = ((cur) / quiz.length * 100) + '%';
+    document.getElementById('qText').textContent = 'Q' + (cur+1) + '. ' + item.q;
+    const box = document.getElementById('qOpts'); box.innerHTML = '';
+    item.opts.forEach((t, i) => {
+      const b = document.createElement('button');
+      b.className = 'opt'; b.textContent = t;
+      b.onclick = () => answer(i, b);
+      box.appendChild(b);
+    });
+    const fb = document.getElementById('qFeedback');
+    fb.className = 'feedback'; fb.textContent = '';
+    document.getElementById('qNext').classList.add('hidden');
+  }
+  function answer(i, btn){
+    const item = quiz[cur];
+    document.querySelectorAll('#qOpts .opt').forEach(b => b.disabled = true);
+    document.getElementById('qOpts').children[item.ans].classList.add('correct');
+    const fb = document.getElementById('qFeedback');
+    if (i === item.ans){
+      score++;
+      fb.textContent = '🎉 答對了！ ' + item.exp.replace('✔ ','');
+      fb.className = 'feedback good';
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = '❌ 答錯了。 ' + item.exp;
+      fb.className = 'feedback badf';
+    }
+    document.getElementById('qBar').style.width = ((cur+1) / quiz.length * 100) + '%';
+    const nxt = document.getElementById('qNext');
+    nxt.textContent = (cur === quiz.length - 1) ? '看結果 🏁' : '下一題 →';
+    nxt.classList.remove('hidden');
+  }
+  function nextQ(){
+    cur++;
+    if (cur < quiz.length){ renderQ(); }
+    else {
+      document.getElementById('quizPlay').classList.add('hidden');
+      const done = document.getElementById('quizDone');
+      done.classList.remove('hidden');
+      document.getElementById('scoreNum').textContent = score + ' / ' + quiz.length;
+      let msg;
+      if (score === 5) msg = '滿分！太厲害了，您已完整掌握腦中風的警訊與處理原則！';
+      else if (score >= 3) msg = '表現不錯！再複習一次 FAST 口訣與緊急處理，會更熟練。';
+      else msg = '別灰心！回到「FAST」與「照護」頁面複習後，再挑戰一次吧！';
+      document.getElementById('scoreMsg').textContent = msg;
+    }
+  }
+
+  /* ---------- 初始化 ---------- */
+  updateGates();
+</script>
+</body>
+</html>
